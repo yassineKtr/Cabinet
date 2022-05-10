@@ -18,7 +18,7 @@ namespace DataAccess.Tests.Readers.Clients
 
         public ClientReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
+            _configuration = TestHelper.GetIConfigurationRoot();
             _clientReader = new ClientReader(_configuration);
             _clientWriter = new ClientWriter(_configuration);
             _fixture = new Fixture();

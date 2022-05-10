@@ -4,11 +4,9 @@ namespace DataAccess.Tests
 {
     public class TestHelper
     {
-        public static IConfigurationRoot GetIConfigurationRoot(string outputPath) =>
+        public static IConfiguration GetIConfigurationRoot() =>
             new ConfigurationBuilder()
-                .SetBasePath(outputPath)
-                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.test.json")
                 .Build();
-        
     }
 }

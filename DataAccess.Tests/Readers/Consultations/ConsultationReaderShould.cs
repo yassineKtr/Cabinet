@@ -18,7 +18,7 @@ namespace DataAccess.Tests.Readers.Consultations
 
         public ConsultationReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
+            _configuration = TestHelper.GetIConfigurationRoot();
             _consultationReader = new ConsultationReader(_configuration);
             _consultationWriter = new ConsultationWriter(_configuration);
             _fixture = new Fixture();

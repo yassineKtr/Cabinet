@@ -19,7 +19,7 @@ namespace DataAccess.Tests.Readers.Dentistes
 
         public DentisteReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
+            _configuration = TestHelper.GetIConfigurationRoot();
             _dentisteReader = new DentisteReader(_configuration);
             _dentisteWriter = new DentisteWriter(_configuration);
             _fixture = new Fixture();

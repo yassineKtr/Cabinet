@@ -33,8 +33,7 @@ namespace Services.Tests.Rdv.Tests
 
         public RdvServicesShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()
-                .Substring(0, Directory.GetCurrentDirectory().Length - 17));
+            _configuration = TestHelper.GetIConfigurationRoot();
             _renderVousWriter = new RendezVousWriter(_configuration);
             _dentisteWriter = new DentisteWriter(_configuration);
             _renderVousReader = new RendezVousReader(_configuration);

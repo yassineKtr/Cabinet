@@ -25,7 +25,7 @@ namespace DataAccess.Tests.Readers.RendezVouss
 
         public RendezVousReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
+            _configuration = TestHelper.GetIConfigurationRoot();
             _rendezVousWriter = new RendezVousWriter(_configuration);
             _rendezVousReader = new RendezVousReader(_configuration);
             _dentisteWriter = new DentisteWriter(_configuration);
