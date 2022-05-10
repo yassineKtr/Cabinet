@@ -1,10 +1,9 @@
 ﻿using AutoFixture;
+using DataAccess.Models;
 using DataAccess.Readers.Consultations;
 using DataAccess.Writers.Consultations;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 using System.Threading.Tasks;
-using DataAccess.Models;
 using Xunit;
 
 namespace DataAccess.Tests.Writers.Consultations

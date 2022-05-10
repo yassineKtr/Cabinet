@@ -1,11 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using DataAccess.Models;
 using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Dentistes;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Dentistes

@@ -7,13 +7,11 @@ namespace DataAccess.Readers.Dentists
 {
     public class DentisteReader : IReadDentiste
     {
-        private readonly PostgresqlConfig _config;
         private readonly IPostgresqlConnection _connection;
 
         public DentisteReader(IConfiguration config)
         {
-            _config = new PostgresqlConfig(config);
-            _connection = new PostgresqlConnection(_config);
+            _connection = new PostgresqlConnection(config);
         }
 
         public async Task<IEnumerable<Dentiste>> GetDentistes()

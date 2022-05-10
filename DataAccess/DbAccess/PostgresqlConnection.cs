@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 namespace DataAccess.DbAccess
 {
@@ -6,8 +7,16 @@ namespace DataAccess.DbAccess
     {
         private readonly NpgsqlConnectionStringBuilder _connectionStringBuilder;
 
-        public PostgresqlConnection(PostgresqlConfig configuration)
+        public PostgresqlConnection(IConfiguration config)
         {
+            var configuration = new PostgresqlConfig()
+            {
+                Host = config.GetSection("ConnectionParams")["host"],
+                Port = Int32.Parse(config.GetSection("ConnectionParams")["port"]),
+                UserName = config.GetSection("ConnectionParams")["username"],
+                DataBase = config.GetSection("ConnectionParams")["database"],
+                Password = config.GetSection("ConnectionParams")["password"],
+            };
             _connectionStringBuilder = new NpgsqlConnectionStringBuilder
             {
                 Host = configuration.Host,

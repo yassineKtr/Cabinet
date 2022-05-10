@@ -7,13 +7,10 @@ namespace DataAccess.Writers.Dentistes
 {
     public class DentisteWriter : IWriteDentiste
     {
-        private readonly PostgresqlConfig _config;
         private readonly IPostgresqlConnection _connection;
-
         public DentisteWriter(IConfiguration config)
         {
-            _config = new PostgresqlConfig(config);
-            _connection = new PostgresqlConnection(_config);
+            _connection = new PostgresqlConnection(config);
         }
 
         public async Task AddDentiste(Dentiste dentiste)

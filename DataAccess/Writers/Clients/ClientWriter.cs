@@ -7,13 +7,10 @@ namespace DataAccess.Writers.Clients
 {
     public class ClientWriter : IWriteClient
     {
-        private readonly PostgresqlConfig _config;
         private readonly IPostgresqlConnection _connection;
-
         public ClientWriter(IConfiguration config)
         {
-            _config = new PostgresqlConfig(config);
-            _connection = new PostgresqlConnection(_config);
+            _connection = new PostgresqlConnection(config);
         }
 
         public async Task AddClient(Client client)

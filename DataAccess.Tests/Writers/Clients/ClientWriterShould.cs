@@ -3,7 +3,6 @@ using DataAccess.Models;
 using DataAccess.Readers.Clients;
 using DataAccess.Writers.Clients;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 

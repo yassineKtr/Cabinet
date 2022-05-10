@@ -1,5 +1,4 @@
 ﻿using DataAccess.Models;
-using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Consultations;
 using DataAccess.Writers.Dentistes;
 

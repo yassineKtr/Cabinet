@@ -7,13 +7,10 @@ namespace DataAccess.Readers.RendezVouss
 {
     public class RendezVousReader : IReadRendezVous
     {
-        private readonly PostgresqlConfig _config;
         private readonly IPostgresqlConnection _connection;
-
         public RendezVousReader(IConfiguration config)
         {
-            _config = new PostgresqlConfig(config);
-            _connection = new PostgresqlConnection(_config);
+            _connection = new PostgresqlConnection(config);
         }
 
         public async Task<IEnumerable<RendezVous>> GetAllRendezVous()
