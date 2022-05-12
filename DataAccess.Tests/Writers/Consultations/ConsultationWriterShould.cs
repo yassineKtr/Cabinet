@@ -1,25 +1,20 @@
 ﻿using AutoFixture;
-using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Consultations;
 using DataAccess.Writers.Consultations;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Writers.Consultations
 {
-    public class ConsultationWriterShould
+    public class ConsultationWriterShould : IClassFixture<TestFixture>
     {
-        private readonly IWriteConsultation _consultationWriter;
-        private readonly IReadConsultation _consultationReader;
         private readonly Fixture _fixture;
-        private readonly IPostgresqlConnection _configuration;
-
-        public ConsultationWriterShould()
+        private ServiceProvider _serviceProvider;
+        public ConsultationWriterShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetConnection();
-            _consultationWriter = new ConsultationWriter(_configuration);
-            _consultationReader = new ConsultationReader(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
             _fixture = new Fixture();
         }
 
@@ -27,6 +22,8 @@ namespace DataAccess.Tests.Writers.Consultations
         public async Task AddConsultation()
         {
             //Arrange
+            var _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            var _consultationReader = _serviceProvider.GetService<IReadConsultation>();
             var sut = _fixture.Create<Consultation>();
             //Act 
             await _consultationWriter.AddConsultation(sut);
@@ -38,6 +35,8 @@ namespace DataAccess.Tests.Writers.Consultations
         public async Task UpdateConsultation()
         {
             //Arrange
+            var _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            var _consultationReader = _serviceProvider.GetService<IReadConsultation>();
             var sut = _fixture.Create<Consultation>();
             await _consultationWriter.AddConsultation(sut);
             //Act
@@ -52,6 +51,8 @@ namespace DataAccess.Tests.Writers.Consultations
         public async Task DeleteConsultation()
         {
             //Arrange
+            var _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            var _consultationReader = _serviceProvider.GetService<IReadConsultation>();            
             var sut = _fixture.Create<Consultation>();
             await _consultationWriter.AddConsultation(sut);
             //Act

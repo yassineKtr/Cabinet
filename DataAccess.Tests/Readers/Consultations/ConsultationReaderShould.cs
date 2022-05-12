@@ -1,26 +1,26 @@
 ﻿using AutoFixture;
-using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Consultations;
 using DataAccess.Writers.Consultations;
+using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Consultations
 {
-    public class ConsultationReaderShould
+    public class ConsultationReaderShould : IClassFixture<TestFixture>
     {
         private readonly IReadConsultation _consultationReader;
         private readonly IWriteConsultation _consultationWriter;
         private readonly Fixture _fixture;
-        private readonly IPostgresqlConnection _configuration;
+        private ServiceProvider _serviceProvider;
 
-        public ConsultationReaderShould()
+        public ConsultationReaderShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetConnection();
-            _consultationReader = new ConsultationReader(_configuration);
-            _consultationWriter = new ConsultationWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
+            _consultationReader = _serviceProvider.GetService<IReadConsultation>();
+            _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
             _fixture = new Fixture();
         }
 

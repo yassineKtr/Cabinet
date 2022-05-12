@@ -1,26 +1,25 @@
 ﻿using AutoFixture;
-using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Clients;
 using DataAccess.Writers.Clients;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Clients
 {
-    public class ClientReaderShould
+    public class ClientReaderShould : IClassFixture<TestFixture>
     {
         private readonly IWriteClient _clientWriter;
         private readonly IReadClient _clientReader;
         private readonly Fixture _fixture;
-        private readonly IPostgresqlConnection _configuration;
-
-        public ClientReaderShould()
+        private ServiceProvider _serviceProvider;
+        public ClientReaderShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetConnection();
-            _clientReader = new ClientReader(_configuration);
-            _clientWriter = new ClientWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
             _fixture = new Fixture();
+            _clientWriter = _serviceProvider.GetService<IWriteClient>();
+            _clientReader = _serviceProvider.GetService<IReadClient>();
         }
 
         [Fact]

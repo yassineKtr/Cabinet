@@ -1,26 +1,25 @@
 ﻿using AutoFixture;
-using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Dentistes;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Dentistes
 {
-    public class DentisteReaderShould
+    public class DentisteReaderShould : IClassFixture<TestFixture>
     {
         private readonly IReadDentiste _dentisteReader;
         private readonly IWriteDentiste _dentisteWriter;
         private readonly Fixture _fixture;
-        private readonly IPostgresqlConnection _configuration;
+        private ServiceProvider _serviceProvider;
 
-        public DentisteReaderShould()
+        public DentisteReaderShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetConnection();
-            _dentisteReader = new DentisteReader(_configuration);
-            _dentisteWriter = new DentisteWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
+            _dentisteReader = _serviceProvider.GetService<IReadDentiste>();
+            _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
             _fixture = new Fixture();
         }
 

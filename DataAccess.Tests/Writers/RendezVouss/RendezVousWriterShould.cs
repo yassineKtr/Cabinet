@@ -1,11 +1,11 @@
 ﻿using AutoFixture;
-using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.RendezVouss;
 using DataAccess.Writers.Clients;
 using DataAccess.Writers.Consultations;
 using DataAccess.Writers.Dentistes;
 using DataAccess.Writers.RendezVouss;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,24 +13,14 @@ using Xunit;
 
 namespace DataAccess.Tests.Writers.RendezVouss
 {
-    public class RendezVousWriterShould
+    public class RendezVousWriterShould : IClassFixture<TestFixture>
     {
-        private readonly IWriteRendezVous _rendezVousWriter;
-        private readonly IReadRendezVous _rendezVousReader;
-        private readonly IWriteDentiste _dentisteWriter;
-        private readonly IWriteConsultation _consultationWriter;
-        private readonly IWriteClient _clientWriter;
         private readonly Fixture _fixture;
-        private readonly IPostgresqlConnection _configuration;
+        private ServiceProvider _serviceProvider;
 
-        public RendezVousWriterShould()
+        public RendezVousWriterShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetConnection();
-            _rendezVousWriter = new RendezVousWriter(_configuration);
-            _rendezVousReader = new RendezVousReader(_configuration);
-            _dentisteWriter = new DentisteWriter(_configuration);
-            _consultationWriter = new ConsultationWriter(_configuration);
-            _clientWriter = new ClientWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
             _fixture = new Fixture();
         }
 
@@ -38,6 +28,11 @@ namespace DataAccess.Tests.Writers.RendezVouss
         public async Task AddRendezVous()
         {
             // Arrange
+            var _clientWriter = _serviceProvider.GetService<IWriteClient>();
+            var _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
+            var _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            var _rendezVousWriter = _serviceProvider.GetService<IWriteRendezVous>();
+            var _rendezVousReader = _serviceProvider.GetService<IReadRendezVous>();
             var client = _fixture.Create<Client>();
             await _clientWriter.AddClient(client);
             var dentiste = _fixture.Create<Dentiste>();
@@ -59,6 +54,11 @@ namespace DataAccess.Tests.Writers.RendezVouss
         public async Task UpdateRendezVous()
         {
             //Arrange
+            var _clientWriter = _serviceProvider.GetService<IWriteClient>();
+            var _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
+            var _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            var _rendezVousWriter = _serviceProvider.GetService<IWriteRendezVous>();
+            var _rendezVousReader = _serviceProvider.GetService<IReadRendezVous>();            
             var client = _fixture.Create<Client>();
             await _clientWriter.AddClient(client);
             var dentiste = _fixture.Create<Dentiste>();
@@ -84,6 +84,11 @@ namespace DataAccess.Tests.Writers.RendezVouss
         public async Task DeleteRendezVous()
         {
             //Arrange
+            var _clientWriter = _serviceProvider.GetService<IWriteClient>();
+            var _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
+            var _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            var _rendezVousWriter = _serviceProvider.GetService<IWriteRendezVous>();
+            var _rendezVousReader = _serviceProvider.GetService<IReadRendezVous>();            
             var client = _fixture.Create<Client>();
             await _clientWriter.AddClient(client);
             var dentiste = _fixture.Create<Dentiste>();

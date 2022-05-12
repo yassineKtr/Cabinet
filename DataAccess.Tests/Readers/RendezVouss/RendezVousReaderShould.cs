@@ -1,11 +1,11 @@
 ﻿using AutoFixture;
-using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.RendezVouss;
 using DataAccess.Writers.Clients;
 using DataAccess.Writers.Consultations;
 using DataAccess.Writers.Dentistes;
 using DataAccess.Writers.RendezVouss;
+using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ using Xunit;
 
 namespace DataAccess.Tests.Readers.RendezVouss
 {
-    public class RendezVousReaderShould
+    public class RendezVousReaderShould : IClassFixture<TestFixture>
     {
         private readonly IWriteRendezVous _rendezVousWriter;
         private readonly IReadRendezVous _rendezVousReader;
@@ -21,16 +21,16 @@ namespace DataAccess.Tests.Readers.RendezVouss
         private readonly IWriteConsultation _consultationWriter;
         private readonly IWriteClient _clientWriter;
         private readonly Fixture _fixture;
-        private readonly IPostgresqlConnection _configuration;
+        private ServiceProvider _serviceProvider;
 
-        public RendezVousReaderShould()
+        public RendezVousReaderShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetConnection();
-            _rendezVousWriter = new RendezVousWriter(_configuration);
-            _rendezVousReader = new RendezVousReader(_configuration);
-            _dentisteWriter = new DentisteWriter(_configuration);
-            _consultationWriter = new ConsultationWriter(_configuration);
-            _clientWriter = new ClientWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
+            _rendezVousWriter = _serviceProvider.GetService<IWriteRendezVous>();
+            _rendezVousReader = _serviceProvider.GetService<IReadRendezVous>();
+            _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
+            _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
+            _clientWriter = _serviceProvider.GetService<IWriteClient>();
             _fixture = new Fixture();
         }
 
