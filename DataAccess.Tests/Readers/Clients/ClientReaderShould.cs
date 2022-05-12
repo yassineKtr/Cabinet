@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
+using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Clients;
 using DataAccess.Writers.Clients;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,11 +13,11 @@ namespace DataAccess.Tests.Readers.Clients
         private readonly IWriteClient _clientWriter;
         private readonly IReadClient _clientReader;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
+        private readonly IPostgresqlConnection _configuration;
 
         public ClientReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot();
+            _configuration = TestHelper.GetConnection();
             _clientReader = new ClientReader(_configuration);
             _clientWriter = new ClientWriter(_configuration);
             _fixture = new Fixture();

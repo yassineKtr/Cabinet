@@ -1,4 +1,6 @@
 ﻿using DataAccess.DbAccess;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Controllers.Extensions
 {

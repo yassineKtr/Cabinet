@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Dentistes;
@@ -13,11 +14,11 @@ namespace DataAccess.Tests.Readers.Dentistes
         private readonly IReadDentiste _dentisteReader;
         private readonly IWriteDentiste _dentisteWriter;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
+        private readonly IPostgresqlConnection _configuration;
 
         public DentisteReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot();
+            _configuration = TestHelper.GetConnection();
             _dentisteReader = new DentisteReader(_configuration);
             _dentisteWriter = new DentisteWriter(_configuration);
             _fixture = new Fixture();

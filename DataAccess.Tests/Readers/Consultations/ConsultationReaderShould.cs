@@ -1,10 +1,10 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
+using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Consultations;
 using DataAccess.Writers.Consultations;
-using Microsoft.Extensions.Configuration;
+using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Consultations
@@ -14,11 +14,11 @@ namespace DataAccess.Tests.Readers.Consultations
         private readonly IReadConsultation _consultationReader;
         private readonly IWriteConsultation _consultationWriter;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
+        private readonly IPostgresqlConnection _configuration;
 
         public ConsultationReaderShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot();
+            _configuration = TestHelper.GetConnection();
             _consultationReader = new ConsultationReader(_configuration);
             _consultationWriter = new ConsultationWriter(_configuration);
             _fixture = new Fixture();

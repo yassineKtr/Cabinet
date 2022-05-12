@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
+using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.RendezVouss;
 using DataAccess.Writers.Clients;
 using DataAccess.Writers.Consultations;
 using DataAccess.Writers.Dentistes;
 using DataAccess.Writers.RendezVouss;
-using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Writers.RendezVouss
@@ -21,11 +21,11 @@ namespace DataAccess.Tests.Writers.RendezVouss
         private readonly IWriteConsultation _consultationWriter;
         private readonly IWriteClient _clientWriter;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
+        private readonly IPostgresqlConnection _configuration;
 
         public RendezVousWriterShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot();
+            _configuration = TestHelper.GetConnection();
             _rendezVousWriter = new RendezVousWriter(_configuration);
             _rendezVousReader = new RendezVousReader(_configuration);
             _dentisteWriter = new DentisteWriter(_configuration);

@@ -1,10 +1,10 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
+using DataAccess.DbAccess;
 using DataAccess.Models;
 using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Dentistes;
-using Microsoft.Extensions.Configuration;
+using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Writers.Dentistes
@@ -14,11 +14,11 @@ namespace DataAccess.Tests.Writers.Dentistes
         private readonly IWriteDentiste _dentisteWriter;
         private readonly IReadDentiste _dentisteReader;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
+        private readonly IPostgresqlConnection _configuration;
 
         public DentisteWriterShould()
         {
-            _configuration = TestHelper.GetIConfigurationRoot();
+            _configuration = TestHelper.GetConnection();
             _dentisteWriter = new DentisteWriter(_configuration);
             _dentisteReader = new DentisteReader(_configuration);
             _fixture = new Fixture();
