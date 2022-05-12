@@ -1,19 +1,16 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Readers.Dentists
 {
     public class DentisteReader : IReadDentiste
     {
         private readonly IPostgresqlConnection _connection;
-
-        public DentisteReader(IConfiguration config)
+        public DentisteReader(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
-
         public async Task<IEnumerable<Dentiste>> GetDentistes()
         {
             var sql = "SELECT * FROM dentiste";

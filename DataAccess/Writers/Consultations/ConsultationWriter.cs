@@ -1,18 +1,16 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Writers.Consultations
 {
     public class ConsultationWriter : IWriteConsultation
     {
         private readonly IPostgresqlConnection _connection;
-        public ConsultationWriter(IConfiguration config)
+        public ConsultationWriter(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
-
         public async Task AddConsultation(Consultation consultation)
         {
             await using var connection = _connection.GetSqlConnection();

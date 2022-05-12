@@ -1,16 +1,15 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Readers.Consultations
 {
     public class ConsultationReader : IReadConsultation
     {
         private readonly IPostgresqlConnection _connection;
-        public ConsultationReader(IConfiguration config)
+        public ConsultationReader(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
         public async Task<IEnumerable<Consultation>> GetConsultations()
         {

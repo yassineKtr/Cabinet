@@ -1,18 +1,16 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Readers.RendezVouss
 {
     public class RendezVousReader : IReadRendezVous
     {
         private readonly IPostgresqlConnection _connection;
-        public RendezVousReader(IConfiguration config)
+        public RendezVousReader(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
-
         public async Task<IEnumerable<RendezVous>> GetAllRendezVous()
         {
             var sql = "SELECT * FROM rendezvous";

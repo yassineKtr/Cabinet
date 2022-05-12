@@ -8,11 +8,10 @@ namespace DataAccess.Writers.RendezVouss
     public class RendezVousWriter : IWriteRendezVous
     {
         private readonly IPostgresqlConnection _connection;
-        public RendezVousWriter(IConfiguration config)
+        public RendezVousWriter(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
-
         public async Task AddRendezVous(RendezVous rendezVous)
         {
             await using var connection = _connection.GetSqlConnection();

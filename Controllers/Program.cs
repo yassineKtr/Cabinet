@@ -1,3 +1,5 @@
+using Controllers.Extensions;
+using DataAccess.DbAccess;
 using DataAccess.Readers.Clients;
 using DataAccess.Readers.Consultations;
 using DataAccess.Readers.Dentists;
@@ -25,6 +27,11 @@ builder.Services.AddSingleton<IReadDentiste, DentisteReader>();
 builder.Services.AddSingleton<IWriteDentiste, DentisteWriter>();
 builder.Services.AddSingleton<IWriteRendezVous,RendezVousWriter>();
 builder.Services.AddSingleton<IReadRendezVous, RendezVousReader>();
+builder.Services.AddSingleton<IPostgresqlConnection, PostgresqlConnection>();
+IConfiguration config = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .Build();
+builder.Services.UsePostgreSql(config.GetSection("ConnectionParams"));
 
 
 

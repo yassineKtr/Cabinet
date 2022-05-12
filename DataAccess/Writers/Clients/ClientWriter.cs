@@ -1,18 +1,16 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Writers.Clients
 {
     public class ClientWriter : IWriteClient
     {
         private readonly IPostgresqlConnection _connection;
-        public ClientWriter(IConfiguration config)
+        public ClientWriter(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
-
         public async Task AddClient(Client client)
         {
             await using var connection = _connection.GetSqlConnection();

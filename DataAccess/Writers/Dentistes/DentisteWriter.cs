@@ -1,18 +1,16 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Writers.Dentistes
 {
     public class DentisteWriter : IWriteDentiste
     {
         private readonly IPostgresqlConnection _connection;
-        public DentisteWriter(IConfiguration config)
+        public DentisteWriter(IPostgresqlConnection connection)
         {
-            _connection = new PostgresqlConnection(config);
+            _connection = connection;
         }
-
         public async Task AddDentiste(Dentiste dentiste)
         {
             await using var connection = _connection.GetSqlConnection();
