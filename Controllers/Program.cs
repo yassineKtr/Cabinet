@@ -27,6 +27,7 @@ builder.Services.AddSingleton<IReadDentiste, DentisteReader>();
 builder.Services.AddSingleton<IWriteDentiste, DentisteWriter>();
 builder.Services.AddSingleton<IWriteRendezVous,RendezVousWriter>();
 builder.Services.AddSingleton<IReadRendezVous, RendezVousReader>();
+builder.Services.AddSingleton<IPostgresqlServices, PostgresqlServices> ();
 builder.Services.AddSingleton<IPostgresqlConnection, PostgresqlConnection>();
 IConfiguration config = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json")

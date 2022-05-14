@@ -49,7 +49,6 @@ namespace Controllers.Controllers
         [HttpPost]
         public async Task<IResult> Post([FromBody] Dentiste dentiste)
         {
-
             try
             {
                 await _writer.AddDentiste(dentiste);
@@ -60,9 +59,8 @@ namespace Controllers.Controllers
                 return Results.Problem(ex.Message);
             }
         }
-
-        [HttpPut("{id}")]
-        public async Task<IResult> Put(Guid id, [FromBody] Dentiste dentiste)
+        [HttpPut]
+        public async Task<IResult> Put([FromBody] Dentiste dentiste)
         {
             try
             {

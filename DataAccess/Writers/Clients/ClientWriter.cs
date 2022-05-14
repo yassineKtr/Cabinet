@@ -1,21 +1,18 @@
-﻿using Dapper;
-using DataAccess.DbAccess;
+﻿using DataAccess.DbAccess;
 using DataAccess.Models;
 
 namespace DataAccess.Writers.Clients
 {
     public class ClientWriter : IWriteClient
     {
-        private readonly IPostgresqlConnection _connection;
-        public ClientWriter(IPostgresqlConnection connection)
+        private readonly IPostgresqlServices _connection;
+        public ClientWriter(IPostgresqlServices connection)
         {
             _connection = connection;
         }
         public async Task AddClient(Client client)
         {
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            var query = "INSERT INTO client (client_id, nom, prenom, email, telephone) " +
+            var query = $"INSERT INTO {DbTables.client} (client_id, nom, prenom, email, telephone) " +
                         "VALUES (@id, @nom, @prenom, @email, @telephone)";
             var parameters = new 
             {
@@ -25,12 +22,11 @@ namespace DataAccess.Writers.Clients
                 email= client.Email,
                 telephone= client.Telephone
             };
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
-
         public async Task UpdateClient(Client client)
         {
-            var query = "UPDATE client SET nom = @nom, prenom = @prenom, email = @email, telephone = @telephone " +
+            var query = $"UPDATE {DbTables.client} SET nom = @nom, prenom = @prenom, email = @email, telephone = @telephone " +
                         "WHERE client_id = @id";
             var parameters = new
             {
@@ -40,20 +36,16 @@ namespace DataAccess.Writers.Clients
                 email = client.Email,
                 telephone = client.Telephone
             };
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
         public async Task DeleteClient(Guid client_id)
         {
-            var query = "DELETE FROM client WHERE client_id = @id";
+            var query = $"DELETE FROM {DbTables.client} WHERE client_id = @id";
             var parameters = new
             {
                 id = client_id
             };
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
     }
 }

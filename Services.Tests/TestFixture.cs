@@ -30,6 +30,7 @@ namespace DataAccess.Tests
             Services.AddSingleton<IReadRendezVous, RendezVousReader>();
             Services.AddSingleton<IPostgresqlConnection, PostgresqlConnection>();
             Services.AddSingleton<IRdvServices, RdvServices>();
+            Services.AddSingleton<IPostgresqlServices, PostgresqlServices>();
             config = new ConfigurationBuilder()
                                     .AddJsonFile("appsettings.test.json")
                                      .Build();

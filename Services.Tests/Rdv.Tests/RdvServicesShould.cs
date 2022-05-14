@@ -1,7 +1,5 @@
 ﻿using AutoFixture;
 using DataAccess.Models;
-using DataAccess.Readers.Consultations;
-using DataAccess.Readers.Dentists;
 using DataAccess.Readers.RendezVouss;
 using DataAccess.Tests;
 using DataAccess.Writers.Clients;
@@ -22,23 +20,17 @@ namespace Services.Tests.Rdv.Tests
         private readonly IRdvServices _rdvServices;
         private readonly IWriteRendezVous _renderVousWriter;
         private readonly IReadRendezVous _renderVousReader;
-        private readonly IReadConsultation _consultationReader;
-        private readonly IReadDentiste _dentisteReader;
         private readonly IWriteDentiste _dentisteWriter;
         private readonly IWriteClient _clientWriter;
         private readonly IWriteConsultation _consultationWriter;
         private ServiceProvider _serviceProvider;
         private readonly Fixture _fixture;
-
-
         public RdvServicesShould(TestFixture testFixture)
         {
             _serviceProvider = testFixture.ServiceProvider;
             _rdvServices = _serviceProvider.GetService<IRdvServices>();
             _renderVousWriter = _serviceProvider.GetService<IWriteRendezVous>();
             _renderVousReader = _serviceProvider.GetService<IReadRendezVous>();
-            _consultationReader = _serviceProvider.GetService<IReadConsultation>();
-            _dentisteReader = _serviceProvider.GetService<IReadDentiste>();
             _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
             _clientWriter = _serviceProvider.GetService<IWriteClient>();
             _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();

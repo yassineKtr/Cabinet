@@ -1,7 +1,4 @@
-﻿using DataAccess.Models;
-
-namespace Services.Rdv;
-
+﻿namespace Services.Rdv;
 public interface IRdvServices
 {
     Task CreateRdv(string dentisteName,

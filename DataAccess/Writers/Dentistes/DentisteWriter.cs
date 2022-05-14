@@ -1,21 +1,18 @@
-﻿using Dapper;
-using DataAccess.DbAccess;
+﻿using DataAccess.DbAccess;
 using DataAccess.Models;
 
 namespace DataAccess.Writers.Dentistes
 {
     public class DentisteWriter : IWriteDentiste
     {
-        private readonly IPostgresqlConnection _connection;
-        public DentisteWriter(IPostgresqlConnection connection)
+        private readonly IPostgresqlServices _connection;
+        public DentisteWriter(IPostgresqlServices connection)
         {
             _connection = connection;
         }
         public async Task AddDentiste(Dentiste dentiste)
         {
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            var query = "INSERT INTO dentiste (dentiste_id, nom, prenom, debut_travail, fin_travail, max_clients)" +
+            var query = $"INSERT INTO {DbTables.dentiste} (dentiste_id, nom, prenom, debut_travail, fin_travail, max_clients)" +
                         " VALUES (@id, @nom, @prenom, @debut_travail, @fin_travail, @max_clients)";
             var parameters = new
             {
@@ -26,12 +23,11 @@ namespace DataAccess.Writers.Dentistes
                 fin_travail = dentiste.Fin_travail,
                 max_clients = dentiste.Max_clients
             };
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
-
         public async Task UpdateDentiste(Dentiste dentiste)
         {
-            var query = "UPDATE dentiste " +
+            var query = $"UPDATE {DbTables.dentiste} " +
                         "SET nom = @nom, prenom = @prenom, debut_travail = @debut_travail, fin_travail = @fin_travail, max_clients = @max_clients" +
                         " WHERE dentiste_id = @id";
             var parameters = new
@@ -43,19 +39,13 @@ namespace DataAccess.Writers.Dentistes
                 fin_travail = dentiste.Fin_travail,
                 max_clients = dentiste.Max_clients
             };
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
-
         public async Task DeleteDentiste(Guid id)
         {
-            var query = "DELETE FROM dentiste WHERE dentiste_id = @id";
+            var query = $"DELETE FROM {DbTables.dentiste} WHERE dentiste_id = @id";
             var parameters = new { id = id };
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
-
     }
 }
