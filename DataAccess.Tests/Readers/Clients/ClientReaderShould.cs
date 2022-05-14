@@ -2,26 +2,24 @@
 using DataAccess.Models;
 using DataAccess.Readers.Clients;
 using DataAccess.Writers.Clients;
-using Microsoft.Extensions.Configuration;
-using System.IO;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Clients
 {
-    public class ClientReaderShould
+    public class ClientReaderShould : IClassFixture<TestFixture>
     {
         private readonly IWriteClient _clientWriter;
         private readonly IReadClient _clientReader;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
-
-        public ClientReaderShould()
+        private ServiceProvider _serviceProvider;
+        public ClientReaderShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
-            _clientReader = new ClientReader(_configuration);
-            _clientWriter = new ClientWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
             _fixture = new Fixture();
+            _clientWriter = _serviceProvider.GetService<IWriteClient>();
+            _clientReader = _serviceProvider.GetService<IReadClient>();
         }
 
         [Fact]

@@ -41,6 +41,7 @@ namespace Services.Rdv
             if (consultation == null) throw new Exception("Consultation not found");
             var rdv = new RendezVous
             {
+                Rdv_id = Guid.NewGuid(),
                 Client_id = clientId,
                 Dentiste_id = dentiste.Dentiste_id,
                 Consultation_id = consultation.Consultation_id,

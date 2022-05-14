@@ -1,48 +1,39 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using DataAccess.Models;
-using DataAccess.Readers.Consultations;
-using DataAccess.Readers.Dentists;
 using DataAccess.Readers.RendezVouss;
 using DataAccess.Tests;
 using DataAccess.Writers.Clients;
 using DataAccess.Writers.Consultations;
 using DataAccess.Writers.Dentistes;
 using DataAccess.Writers.RendezVouss;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Services.Rdv;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Services.Tests.Rdv.Tests
 {
-    public class RdvServicesShould
+    public class RdvServicesShould : IClassFixture<TestFixture>
     {
         private readonly IRdvServices _rdvServices;
         private readonly IWriteRendezVous _renderVousWriter;
         private readonly IReadRendezVous _renderVousReader;
-        private readonly IReadConsultation _consultationReader;
-        private readonly IReadDentiste _dentisteReader;
         private readonly IWriteDentiste _dentisteWriter;
         private readonly IWriteClient _clientWriter;
         private readonly IWriteConsultation _consultationWriter;
-        private readonly IConfiguration _configuration;
+        private ServiceProvider _serviceProvider;
         private readonly Fixture _fixture;
-
-
-        public RdvServicesShould()
+        public RdvServicesShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()
-                .Substring(0, Directory.GetCurrentDirectory().Length - 17));
-            _renderVousWriter = new RendezVousWriter(_configuration);
-            _dentisteWriter = new DentisteWriter(_configuration);
-            _renderVousReader = new RendezVousReader(_configuration);
-            _consultationReader = new ConsultationReader(_configuration);
-            _consultationWriter = new ConsultationWriter(_configuration);
-            _dentisteReader = new DentisteReader(_configuration);
-            _clientWriter = new ClientWriter(_configuration);
-            _rdvServices = new RdvServices(_renderVousWriter, _renderVousReader, _consultationReader, _dentisteReader);
+            _serviceProvider = testFixture.ServiceProvider;
+            _rdvServices = _serviceProvider.GetService<IRdvServices>();
+            _renderVousWriter = _serviceProvider.GetService<IWriteRendezVous>();
+            _renderVousReader = _serviceProvider.GetService<IReadRendezVous>();
+            _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
+            _clientWriter = _serviceProvider.GetService<IWriteClient>();
+            _consultationWriter = _serviceProvider.GetService<IWriteConsultation>();
             _fixture = new Fixture();
         }
 

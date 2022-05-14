@@ -1,26 +1,21 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using DataAccess.Models;
 using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Dentistes;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Writers.Dentistes
 {
-    public class DentisteWriterShould
+    public class DentisteWriterShould : IClassFixture<TestFixture>
     {
-        private readonly IWriteDentiste _dentisteWriter;
-        private readonly IReadDentiste _dentisteReader;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
-
-        public DentisteWriterShould()
+        private ServiceProvider _serviceProvider;
+        public DentisteWriterShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
-            _dentisteWriter = new DentisteWriter(_configuration);
-            _dentisteReader = new DentisteReader(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
             _fixture = new Fixture();
         }
 
@@ -28,6 +23,8 @@ namespace DataAccess.Tests.Writers.Dentistes
         public async Task AddDentiste()
         {
             //Arrange
+            var _dentisteReader = _serviceProvider.GetService<IReadDentiste>();
+            var _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
             var dentiste = _fixture.Create<Dentiste>();
             await _dentisteWriter.AddDentiste(dentiste);
             //Act
@@ -39,6 +36,8 @@ namespace DataAccess.Tests.Writers.Dentistes
         public async Task UpdateDentiste()
         {
             //Arrange
+            var _dentisteReader = _serviceProvider.GetService<IReadDentiste>();
+            var _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
             var dentiste = _fixture.Create<Dentiste>();
             await _dentisteWriter.AddDentiste(dentiste);
             var newDentiste = _fixture.Build<Dentiste>()
@@ -55,6 +54,8 @@ namespace DataAccess.Tests.Writers.Dentistes
         public async Task DeleteDentiste()
         {
             //Arrange
+            var _dentisteReader = _serviceProvider.GetService<IReadDentiste>();
+            var _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
             var dentiste = _fixture.Create<Dentiste>();
             await _dentisteWriter.AddDentiste(dentiste);
             //Act

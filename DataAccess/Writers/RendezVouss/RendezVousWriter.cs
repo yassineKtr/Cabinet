@@ -1,26 +1,18 @@
-﻿using Dapper;
-using DataAccess.DbAccess;
+﻿using DataAccess.DbAccess;
 using DataAccess.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Writers.RendezVouss
 {
     public class RendezVousWriter : IWriteRendezVous
     {
-        private readonly PostgresqlConfig _config;
-        private readonly IPostgresqlConnection _connection;
-
-        public RendezVousWriter(IConfiguration config)
+        private readonly IPostgresqlServices _connection;
+        public RendezVousWriter(IPostgresqlServices connection)
         {
-            _config = new PostgresqlConfig(config);
-            _connection = new PostgresqlConnection(_config);
+            _connection = connection;
         }
-
         public async Task AddRendezVous(RendezVous rendezVous)
-        {
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();            
-            var sql = "INSERT INTO rendezvous (rdv_id, date_rdv, annule, reason, dentiste_id,consultation_id,client_id,paye) " +
+        {           
+            var sql = $"INSERT INTO {DbTables.rendezvous} (rdv_id, date_rdv, annule, reason, dentiste_id,consultation_id,client_id,paye) " +
                       "VALUES (@id, @date, @annule, @reason, @dentisteId, @consultationId, @clientId, @paye)";
             var parameters = new
             {
@@ -33,12 +25,11 @@ namespace DataAccess.Writers.RendezVouss
                 clientId = rendezVous.Client_id,
                 paye = rendezVous.Paye
             };
-            await connection.ExecuteAsync(sql, parameters);
+            await _connection.Execute(sql, parameters);
         }
-
         public async Task UpdateRendezVous(RendezVous rdv)
         {
-            var query = "UPDATE rendezvous " +
+            var query = $"UPDATE {DbTables.rendezvous} " +
                         "SET date_rdv = @date, " +
                         " annule = @annule, " +
                         "reason = @reason, " +
@@ -58,20 +49,13 @@ namespace DataAccess.Writers.RendezVouss
                 clientId = rdv.Client_id,
                 paye = rdv.Paye
             };
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
-
         public async Task DeleteRendezVous(Guid id)
         {
-            var query = "DELETE FROM rendezvous WHERE rdv_id = @id";
+            var query = $"DELETE FROM {DbTables.rendezvous} WHERE rdv_id = @id";
             var parameters = new {id = id};
-            await using var connection = _connection.GetSqlConnection();
-            await connection.OpenAsync();
-            await connection.ExecuteAsync(query, parameters);
+            await _connection.Execute(query, parameters);
         }
-
-
     }
 }

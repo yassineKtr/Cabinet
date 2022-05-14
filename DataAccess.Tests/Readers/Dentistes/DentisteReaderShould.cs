@@ -1,27 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using DataAccess.Models;
 using DataAccess.Readers.Dentists;
 using DataAccess.Writers.Dentistes;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Readers.Dentistes
 {
-    public class DentisteReaderShould
+    public class DentisteReaderShould : IClassFixture<TestFixture>
     {
         private readonly IReadDentiste _dentisteReader;
         private readonly IWriteDentiste _dentisteWriter;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
+        private ServiceProvider _serviceProvider;
 
-        public DentisteReaderShould()
+        public DentisteReaderShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 17));
-            _dentisteReader = new DentisteReader(_configuration);
-            _dentisteWriter = new DentisteWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;
+            _dentisteReader = _serviceProvider.GetService<IReadDentiste>();
+            _dentisteWriter = _serviceProvider.GetService<IWriteDentiste>();
             _fixture = new Fixture();
         }
 

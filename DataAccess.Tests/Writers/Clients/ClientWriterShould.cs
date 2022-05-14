@@ -2,25 +2,19 @@
 using DataAccess.Models;
 using DataAccess.Readers.Clients;
 using DataAccess.Writers.Clients;
-using Microsoft.Extensions.Configuration;
-using System.IO;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace DataAccess.Tests.Writers.Clients
 {
-    public class ClientWriterShould
+    public class ClientWriterShould : IClassFixture<TestFixture>
     {
-        private readonly IWriteClient _clientWriter;
-        private readonly IReadClient _clientReader;
+        private ServiceProvider _serviceProvider;
         private readonly Fixture _fixture;
-        private readonly IConfiguration _configuration;
-
-        public ClientWriterShould()
+        public ClientWriterShould(TestFixture testFixture)
         {
-            _configuration = TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory().Substring(0,Directory.GetCurrentDirectory().Length-17));
-            _clientReader = new ClientReader(_configuration);
-            _clientWriter = new ClientWriter(_configuration);
+            _serviceProvider = testFixture.ServiceProvider;          
             _fixture = new Fixture();
         }
 
@@ -28,6 +22,8 @@ namespace DataAccess.Tests.Writers.Clients
         public async Task AddClient()
         {
             //Arrange
+            var _clientReader = _serviceProvider.GetService<IReadClient>();
+            var _clientWriter = _serviceProvider.GetService<IWriteClient>();
             var sut = _fixture.Create<Client>();
             //Act 
             await _clientWriter.AddClient(sut);
@@ -41,6 +37,8 @@ namespace DataAccess.Tests.Writers.Clients
         public async Task UpdateClient()
         {
             //Arrange
+            var _clientReader = _serviceProvider.GetService<IReadClient>();
+            var _clientWriter = _serviceProvider.GetService<IWriteClient>();
             var sut = _fixture.Create<Client>();
             await _clientWriter.AddClient(sut);
             //Act 
@@ -56,6 +54,8 @@ namespace DataAccess.Tests.Writers.Clients
         public async Task DeleteClient()
         {
             //Arrange
+            var _clientReader = _serviceProvider.GetService<IReadClient>();
+            var _clientWriter = _serviceProvider.GetService<IWriteClient>();
             var sut = _fixture.Create<Client>();
             await _clientWriter.AddClient(sut);
             //Act 
